@@ -1,0 +1,17 @@
+{
+  "name": "impostor-game",
+  "version": "1.0.0",
+  "description": "Juego del Impostor multijugador en tiempo real",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["impostor", "game", "multiplayer", "socket.io"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1"
+  }
+}
