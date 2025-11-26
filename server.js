@@ -137,8 +137,27 @@ io.on('connection', (socket) => {
     // Jugador ha visto su palabra
     socket.on('word-revealed', () => {
         const room = roomManager.getPlayerRoom(socket.id);
-        if (room) {
-            socket.to(room.code).emit('player-ready', socket.id);
+        if (!room || !room.gameState) {
+            return;
+        }
+
+        // Marcar jugador como listo
+        if (!room.gameState.readyPlayers) {
+            room.gameState.readyPlayers = [];
+        }
+
+        if (!room.gameState.readyPlayers.includes(socket.id)) {
+            room.gameState.readyPlayers.push(socket.id);
+        }
+
+        // Notificar a otros jugadores
+        socket.to(room.code).emit('player-ready', socket.id);
+
+        // Verificar si todos los jugadores están listos
+        if (room.gameState.readyPlayers.length === room.players.length) {
+            // Todos listos! Iniciar la pantalla de juego para todos
+            io.to(room.code).emit('all-players-ready');
+            console.log(`Todos los jugadores están listos en sala ${room.code}. Iniciando juego...`);
         }
     });
 

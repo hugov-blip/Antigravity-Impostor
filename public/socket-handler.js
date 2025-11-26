@@ -54,6 +54,9 @@ class SocketHandler {
         // Jugadores actualizados
         this.socket.on('players-updated', (players) => {
             window.dispatchEvent(new CustomEvent('players-updated', { detail: players }));
+        });// Todos los jugadores listos
+        this.socket.on('all-players-ready', () => {
+            window.dispatchEvent(new CustomEvent('all-players-ready'));
         });
     }
 

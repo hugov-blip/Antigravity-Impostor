@@ -358,9 +358,12 @@ function initRevealScreen(assignment, turnOrder, currentTurn) {
 // Botón listo
 elements.readyBtn.addEventListener('click', () => {
     window.socketHandler.wordRevealed();
-    initGameScreen();
+    // Esperar a que todos estén listos
+    elements.readyBtn.addEventListener('click', () => {
+        window.socketHandler.wordRevealed();
+        // Esperar a que todos estén listos
+    });
 });
-
 // Evento de palabra revelada
 window.addEventListener('word-revealed', () => {
     elements.readyBtn.style.display = 'inline-flex';
@@ -502,7 +505,11 @@ window.addEventListener('players-updated', (e) => {
     appState.players = e.detail;
     updatePlayersList();
 });
-
+// Todos listos - cambiar a pantalla de juego
+window.addEventListener('all-players-ready', () => {
+    initGameScreen();
+    showToast('¡Todos listos! Que comience el juego');
+});
 // ========== Inicialización ==========
 // Verificar si hay código de sala en la URL
 const urlParams = new URLSearchParams(window.location.search);
