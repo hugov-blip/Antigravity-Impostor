@@ -1,4 +1,5 @@
 // socket-handler.js - WebSocket event handling
+console.log('🔌 Socket-handler.js cargado correctamente - v2025');
 
 class SocketHandler {
     constructor() {
