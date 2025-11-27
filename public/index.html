@@ -2,89 +2,144 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Impostor - Juego Multijugador</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Impostor - Juego Multijugador</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-  <div id="welcome-screen" class="screen active">
-    <div class="container">
-      <div class="logo-container">
-        <div class="logo-icon"><i class="fas fa-mask"></i></div>
-        <h1 class="game-title">IMPOSTOR</h1>
-        <p class="game-subtitle">¿Quién es el impostor?</p>
-      </div>
-      <div class="card">
-        <h2>Introduce tu nombre</h2>
-        <input type="text" id="player-name-input" placeholder="Tu nombre" maxlength="20" autocomplete="off">
-        <button id="continue-btn" class="btn btn-primary">Continuar <i class="fas fa-arrow-right"></i></button>
-      </div>
-      <div class="action-buttons">
-        <button id="create-room-btn" class="btn btn-secondary" disabled><i class="fas fa-plus"></i> Crear Sala</button>
-        <button id="join-room-btn" class="btn btn-secondary" disabled><i class="fas fa-sign-in-alt"></i> Unirse a
-          Sala</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="lobby-screen" class="screen">
-    <div class="container">
-      <div class="lobby-header">
-        <h2>Sala de Espera</h2>
-        <div class="room-code-display">
-          <span class="label">Código de sala:</span>
-          <span id="room-code" class="code">------</span>
-          <button id="copy-code-btn" class="icon-btn" title="Copiar código"><i class="fas fa-copy"></i></button>
-          <button id="share-link-btn" class="icon-btn" title="Compartir enlace"><i
-              class="fas fa-share-alt"></i></button>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Jugadores <span id="player-count">(0)</span></h3>
-        <div id="players-list" class="players-list"></div>
-      </div>
-      <div id="game-config" class="card config-panel">
-        <h3>Configuración del Juego</h3>
-        <div class="config-row">
-          <div class="reveal-container-simple">
-            <div class="reveal-card-modern">
-              <div class="reveal-badge">Tu Asignación</div>
-              <div id="word-display" class="word-display-modern"></div>
-              <div id="hint-display" class="hint-display-modern"></div>
-              <button id="ready-btn" class="btn btn-primary btn-ready-modern"><i class="fas fa-check-circle"></i> Estoy
-                Listo</button>
-            </div>
-          </div>
-        </div>
-
-        <div id="game-screen" class="screen">
-          <div class="container">
-            <div class="game-header">
-              <h2>En Juego</h2>
-              <div id="current-turn-display" class="turn-display"><i class="fas fa-user-clock"></i> <span>Turno de:
-                  <strong id="current-turn-name">---</strong></span></div>
-            </div>
-            <div class="card">
-              <div class="modal-content">
-                <h3>Unirse a Sala</h3>
-                <input type="text" id="room-code-input" placeholder="Código de sala (6 caracteres)" maxlength="6"
-                  autocomplete="off">
-                <div class="modal-buttons">
-                  <button id="cancel-join-btn" class="btn btn-secondary">Cancelar</button>
-                  <button id="confirm-join-btn" class="btn btn-primary">Unirse</button>
+    <!-- Pantalla de Bienvenida -->
+    <div id="welcome-screen" class="screen active">
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-mask"></i>
                 </div>
-              </div>
+                <h1 class="game-title">IMPOSTOR</h1>
+                <p class="game-subtitle">¿Quién es el impostor?</p>
             </div>
 
+            <div class="card">
+                <h2>Introduce tu nombre</h2>
+                <input type="text" id="player-name-input" placeholder="Tu nombre" maxlength="20" autocomplete="off">
+                <button id="continue-btn" class="btn btn-primary">
+                    Continuar
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="action-buttons">
+                <button id="create-room-btn" class="btn btn-secondary" disabled>
+                    <i class="fas fa-plus"></i>
+                    Crear Sala
+                </button>
+                <button id="join-room-btn" class="btn btn-secondary" disabled>
+                    <i class="fas fa-sign-in-alt"></i>
+                    Unirse a Sala
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Sala de Espera -->
+    <div id="lobby-screen" class="screen">
+        <div class="container">
+            <div class="lobby-header">
+                <h2>Sala de Espera</h2>
+                <div class="room-code-display">
+                    <span class="label">Código de sala:</span>
+                    <span id="room-code" class="code">------</span>
+                    <button id="copy-code-btn" class="icon-btn" title="Copiar código">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button id="share-link-btn" class="icon-btn" title="Compartir enlace">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Jugadores <span id="player-count">(0)</span></h3>
+                <div id="players-list" class="players-list"></div>
+            </div>
+
+            <div id="game-config" class="card config-panel">
+                <h3>Configuración del Juego</h3>
+                <div class="config-row">
+                    <i class="fas fa-door-open"></i>
+                    Salir de la Sala
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pantalla de Revelación de Palabra - SIMPLIFICADA -->
+            <div id="reveal-screen" class="screen">
+                <div class="reveal-container-direct">
+                    <div class="reveal-card">
+                        <div class="reveal-badge">Tu Asignación</div>
+                        <div id="word-display" class="word-display"></div>
+                        <div id="hint-display" class="hint-display"></div>
+                        <button id="ready-btn" class="btn btn-primary btn-large">
+                            <i class="fas fa-check-circle"></i>
+                            Estoy Listo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pantalla de Juego -->
+            <div id="game-screen" class="screen">
+                <div class="container">
+                    <div class="game-header">
+                        <h2>En Juego</h2>
+                        <div id="current-turn-display" class="turn-display">
+                            <i class="fas fa-user-clock"></i>
+                            <span>Turno de: <strong id="current-turn-name">---</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Orden de Turnos</h3>
+                        <div id="turn-order-list" class="turn-order-list"></div>
+                    </div>
+
+                    <div class="card chat-card">
+                        <h3>Chat</h3>
+                        <div id="chat-messages" class="chat-messages"></div>
+                        <div id="chat-input-container" class="chat-input-container">
+                            <input type="text" id="chat-input" placeholder="Escribe tu palabra o frase..."
+                                maxlength="50" disabled>
+                            <button id="send-chat-btn" class="btn btn-primary" disabled>
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para unirse a sala -->
+            <div id="join-modal" class="modal">
+                <div class="modal-content">
+                    <h3>Unirse a Sala</h3>
+                    <input type="text" id="room-code-input" placeholder="Código de sala (6 caracteres)" maxlength="6"
+                        autocomplete="off">
+                    <div class="modal-buttons">
+                        <button id="cancel-join-btn" class="btn btn-secondary">Cancelar</button>
+                        <button id="confirm-join-btn" class="btn btn-primary">Unirse</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast para notificaciones -->
             <div id="toast" class="toast"></div>
 
+            <!-- Scripts -->
             <script src="/socket.io/socket.io.js"></script>
             <script src="socket-handler.js"></script>
             <script src="app.js"></script>
