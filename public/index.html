@@ -72,37 +72,22 @@
                   <strong id="current-turn-name">---</strong></span></div>
             </div>
             <div class="card">
-              <h3>Orden de Turnos</h3>
-              <div id="turn-order-list" class="turn-order-list"></div>
-            </div>
-            <div class="card chat-card">
-              <h3>Chat</h3>
-              <div id="chat-messages" class="chat-messages"></div>
-              <div id="chat-input-container" class="chat-input-container">
-                <input type="text" id="chat-input" placeholder="Escribe tu palabra o frase..." maxlength="50" disabled>
-                <button id="send-chat-btn" class="btn btn-primary" disabled><i class="fas fa-paper-plane"></i></button>
+              <div class="modal-content">
+                <h3>Unirse a Sala</h3>
+                <input type="text" id="room-code-input" placeholder="Código de sala (6 caracteres)" maxlength="6"
+                  autocomplete="off">
+                <div class="modal-buttons">
+                  <button id="cancel-join-btn" class="btn btn-secondary">Cancelar</button>
+                  <button id="confirm-join-btn" class="btn btn-primary">Unirse</button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div id="join-modal" class="modal">
-          <div class="modal-content">
-            <h3>Unirse a Sala</h3>
-            <input type="text" id="room-code-input" placeholder="Código de sala (6 caracteres)" maxlength="6"
-              autocomplete="off">
-            <div class="modal-buttons">
-              <button id="cancel-join-btn" class="btn btn-secondary">Cancelar</button>
-              <button id="confirm-join-btn" class="btn btn-primary">Unirse</button>
-            </div>
-          </div>
-        </div>
+            <div id="toast" class="toast"></div>
 
-        <div id="toast" class="toast"></div>
-
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="socket-handler.js"></script>
-        <script src="app.js"></script>
+            <script src="/socket.io/socket.io.js"></script>
+            <script src="socket-handler.js"></script>
+            <script src="app.js"></script>
 </body>
 
 </html>
