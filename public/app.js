@@ -309,17 +309,7 @@ elements.shareLinkBtn.addEventListener('click', () => {
 });
 
 // Iniciar juego
-elements.startGameBtn.addEventListener('click', () => {
-    window.socketHandler.startGame((response) => {
-        if (!response.success) {
-            showToast('Error: ' + response.error);
-        }
-    });
-});
-
-// Salir de la sala
-elements.leaveRoomBtn.addEventListener('click', () => {
-    location.reload();
+location.reload();
 });
 
 // ========== Pantalla de Revelación ==========
