@@ -6,6 +6,7 @@ const { Server } = require('socket.io');
 const path = require('path');
 const RoomManager = require('./server/room-manager');
 const gameLogic = require('./server/game-logic');
+const VotingSystem = require('./server/voting-system');
 
 const app = express();
 const httpServer = createServer(app);
@@ -116,6 +117,10 @@ io.on('connection', (socket) => {
 
             // Inicializar el juego
             const gameState = gameLogic.initializeGame(room.players, room.config);
+
+            // Initialize voting system
+            VotingSystem.initializeVotingState(gameState);
+
             roomManager.startGame(room.code, gameState);
 
             // Enviar asignaciones individuales a cada jugador

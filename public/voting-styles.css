@@ -1,0 +1,82 @@
+/* Voting System CSS - ADD TO styles.css */
+
+.voting-card {
+    background: linear-gradient(135deg, rgba(255, 0, 110, 0.1), rgba(123, 44, 191, 0.1));
+    border-color: rgba(255, 0, 110, 0.4);
+    margin-top: var(--space-lg);
+}
+
+.voting-instructions {
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: var(--space-md);
+}
+
+.voting-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.btn-vote {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(0, 242, 254, 0.3);
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.btn-vote:hover {
+    transform: translateY(-2px);
+    border-color: #00f2fe;
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+    background: rgba(0, 242, 254, 0.2);
+}
+
+.btn-vote i {
+    margin-right: 8px;
+}
+
+.btn-vote-skip {
+    background: var(--gradient-success) !important;
+    border-color: transparent !important;
+    grid-column: 1 / -1;
+}
+
+.btn-vote-skip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(6, 255, 165, 0.8);
+}
+
+.results-card {
+    background: rgba(0, 242, 254, 0.1);
+    border-color: rgba(0, 242, 254, 0.4);
+    margin-top: var(--space-lg);
+    text-align: center;
+}
+
+.results-card h4 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+}
+
+.impostor-eliminated {
+    font-size: 2rem;
+    font-weight: 900;
+    background: var(--gradient-danger);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding: var(--space-lg);
+}
+
+.crew-eliminated {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    padding: var(--space-lg);
+}

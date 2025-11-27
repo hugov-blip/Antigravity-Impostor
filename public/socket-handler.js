@@ -54,9 +54,28 @@ class SocketHandler {
         // Jugadores actualizados
         this.socket.on('players-updated', (players) => {
             window.dispatchEvent(new CustomEvent('players-updated', { detail: players }));
-        });// Todos los jugadores listos
+        });
+
+        // Todos los jugadores listos
         this.socket.on('all-players-ready', () => {
             window.dispatchEvent(new CustomEvent('all-players-ready'));
+        });
+
+        // Voting events
+        this.socket.on('voting-start', (data) => {
+            window.dispatchEvent(new CustomEvent('voting-start', { detail: data }));
+        });
+
+        this.socket.on('player-eliminated', (data) => {
+            window.dispatchEvent(new CustomEvent('player-eliminated', { detail: data }));
+        });
+
+        this.socket.on('game-over', (data) => {
+            window.dispatchEvent(new CustomEvent('game-over', { detail: data }));
+        });
+
+        this.socket.on('voting-result-skip', (data) => {
+            window.dispatchEvent(new CustomEvent('voting-skip', { detail: data }));
         });
     }
 
@@ -107,6 +126,16 @@ class SocketHandler {
     // Agregar amigo
     addFriend(friendId) {
         this.socket.emit('add-friend', friendId);
+    }
+
+    // Send chat message (with round tracking)
+    sendChatMessage(message, callback = () => { }) {
+        this.socket.emit('send-chat-message', message, callback);
+    }
+
+    // Submit vote
+    submitVote(targetId, callback = () => { }) {
+        this.socket.emit('submit-vote', targetId, callback);
     }
 
     // Obtener ID del socket
