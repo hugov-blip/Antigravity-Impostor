@@ -256,22 +256,17 @@ function updatePlayersList() {
     });
 }
 
-// Botones de configuración
-document.querySelectorAll('.btn-number').forEach(btn => {
+// Botones de selector de impostores (1 o 2)
+document.querySelectorAll('.btn-impostor-select').forEach(btn => {
     btn.addEventListener('click', () => {
-        const action = btn.dataset.action;
-        const targetId = btn.dataset.target;
-        const input = document.getElementById(targetId);
-        let value = parseInt(input.value);
+        const count = parseInt(btn.dataset.count);
+        appState.config.impostorCount = count;
 
-        if (action === 'increase') {
-            value = Math.min(value + 1, parseInt(input.max));
-        } else {
-            value = Math.max(value - 1, parseInt(input.min));
-        }
+        // Update UI
+        document.querySelectorAll('.btn-impostor-select').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-        input.value = value;
-        appState.config.impostorCount = value;
+        // Notify server
         window.socketHandler.updateConfig(appState.config);
     });
 });

@@ -390,18 +390,6 @@ input[type="text"]::placeholder {
 }
 
 .btn-danger:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-pink-glow), 0 8px 30px rgba(255, 0, 110, 0.5);
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-/* ========== ACTIONS BUTTONS ========== */
-.action-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-md);
