@@ -1,88 +1,115 @@
-// Definición de elementos del DOM
-const elements = {
-    // Pantalla de bienvenida
-    playerNameInput: document.getElementById('player-name-input'),
-    continueBtn: document.getElementById('continue-btn'),
-    createRoomBtn: document.getElementById('create-room-btn'),
-    joinRoomBtn: document.getElementById('join-room-btn'),
-
-    // Modal de unirse
-    joinModal: document.getElementById('join-modal'),
-    roomCodeInput: document.getElementById('room-code-input'),
-    cancelJoinBtn: document.getElementById('cancel-join-btn'),
-    confirmJoinBtn: document.getElementById('confirm-join-btn'),
-
-    // Lobby
-    roomCodeDisplay: document.getElementById('room-code'),
-    playersList: document.getElementById('players-list'),
-    playerCount: document.getElementById('player-count'),
-    gameConfig: document.getElementById('game-config'),
-    impostorCountInput: document.getElementById('impostor-count'),
-    includeHintInput: document.getElementById('include-hint'),
-    startGameBtn: document.getElementById('start-game-btn'),
-    copyCodeBtn: document.getElementById('copy-code-btn'),
-    shareLinkBtn: document.getElementById('share-link-btn'),
-    leaveRoomBtn: document.getElementById('leave-room-btn'),
-
-    // Pantalla de revelación
-    wordDisplay: document.getElementById('word-display'),
-    hintDisplay: document.getElementById('hint-display'),
-    readyBtn: document.getElementById('ready-btn'),
-
-    // Pantalla de juego
-    turnOrderList: document.getElementById('turn-order-list'),
-    currentTurnName: document.getElementById('current-turn-name'),
-    chatMessages: document.getElementById('chat-messages'),
-    chatInput: document.getElementById('chat-input'),
-    sendChatBtn: document.getElementById('send-chat-btn'),
-
-    // Toast
-    toast: document.getElementById('toast')
-};
+// app.js - Lógica principal del cliente
 
 // Estado de la aplicación
 const appState = {
+    currentScreen: 'welcome',
     playerName: '',
     roomCode: '',
     players: [],
     config: { impostorCount: 1, includeHint: false },
     assignment: null,
     turnOrder: [],
-    currentTurn: null
+    currentTurn: null,
+    swipeReveal: null
 };
 
-// ========== Utilidades ==========
-function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-    document.getElementById(`${screenId}-screen`).classList.add('active');
+// ========== Elementos del DOM ==========
+const elements = {
+    // Welcome screen
+    welcomeScreen: document.getElementById('welcome-screen'),
+    playerNameInput: document.getElementById('player-name-input'),
+    continueBtn: document.getElementById('continue-btn'),
+    createRoomBtn: document.getElementById('create-room-btn'),
+    joinRoomBtn: document.getElementById('join-room-btn'),
+
+    // Lobby screen
+    lobbyScreen: document.getElementById('lobby-screen'),
+    roomCodeDisplay: document.getElementById('room-code'),
+    copyCodeBtn: document.getElementById('copy-code-btn'),
+    shareLinkBtn: document.getElementById('share-link-btn'),
+    playersList: document.getElementById('players-list'),
+    playerCount: document.getElementById('player-count'),
+    gameConfig: document.getElementById('game-config'),
+    impostorCountInput: document.getElementById('impostor-count'),
+    includeHintInput: document.getElementById('include-hint'),
+    startGameBtn: document.getElementById('start-game-btn'),
+    leaveRoomBtn: document.getElementById('leave-room-btn'),
+
+    // Reveal screen
+    revealScreen: document.getElementById('reveal-screen'),
+    revealCurtain: document.getElementById('reveal-curtain'),
+    wordDisplay: document.getElementById('word-display'),
+    hintDisplay: document.getElementById('hint-display'),
+    readyBtn: document.getElementById('ready-btn'),
+
+    // Game screen
+    gameScreen: document.getElementById('game-screen'),
+    currentTurnName: document.getElementById('current-turn-name'),
+    turnOrderList: document.getElementById('turn-order-list'),
+    chatMessages: document.getElementById('chat-messages'),
+    chatInput: document.getElementById('chat-input'),
+    sendChatBtn: document.getElementById('send-chat-btn'),
+
+    // Modal
+    joinModal: document.getElementById('join-modal'),
+    roomCodeInput: document.getElementById('room-code-input'),
+    cancelJoinBtn: document.getElementById('cancel-join-btn'),
+    confirmJoinBtn: document.getElementById('confirm-join-btn'),
+
+    // Toast
+    toast: document.getElementById('toast')
+};
+
+// ========== Funciones de Utilidad ==========
+function showScreen(screenName) {
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+
+    const screen = document.getElementById(`${screenName}-screen`);
+    if (screen) {
+        screen.classList.add('active');
+        appState.currentScreen = screenName;
+    }
 }
 
-function showToast(message) {
+function showToast(message, duration = 3000) {
     elements.toast.textContent = message;
-    elements.toast.classList.add('active');
-    setTimeout(() => elements.toast.classList.remove('active'), 3000);
+    elements.toast.classList.add('show');
+
+    setTimeout(() => {
+        elements.toast.classList.remove('show');
+    }, duration);
 }
 
 function getInitials(name) {
-    return name.split(' ').map(n => n[0].toUpperCase()).join('').substring(0, 2);
+    return name
+        .split(' ')
+        .map(word => word[0])
+        .join('')
+        .toUpperCase()
+        .substring(0, 2);
 }
 
 // ========== Pantalla de Bienvenida ==========
+elements.playerNameInput.addEventListener('input', (e) => {
+    const name = e.target.value.trim();
+    const isValid = name.length >= 2;
+
+    elements.continueBtn.disabled = !isValid;
+    elements.createRoomBtn.disabled = !isValid;
+    elements.joinRoomBtn.disabled = !isValid;
+});
+
 elements.playerNameInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !elements.continueBtn.disabled) {
         elements.continueBtn.click();
     }
 });
 
-elements.playerNameInput.addEventListener('input', () => {
-    const hasName = elements.playerNameInput.value.trim().length > 0;
-    elements.continueBtn.disabled = !hasName;
-    elements.createRoomBtn.disabled = !hasName;
-    elements.joinRoomBtn.disabled = !hasName;
-});
-
 elements.continueBtn.addEventListener('click', () => {
     appState.playerName = elements.playerNameInput.value.trim();
+    // El botón de continuar simplemente habilita las opciones
     showToast(`¡Hola, ${appState.playerName}! Elige crear o unirte a una sala.`);
 });
 
@@ -148,11 +175,17 @@ elements.roomCodeInput.addEventListener('keypress', (e) => {
 
 // ========== Pantalla de Lobby ==========
 function updateLobby() {
+    // Actualizar código de sala
     elements.roomCodeDisplay.textContent = appState.roomCode;
+
+    // Actualizar lista de jugadores
     updatePlayersList();
+
+    // Actualizar configuración
     elements.impostorCountInput.value = appState.config.impostorCount;
     elements.includeHintInput.checked = appState.config.includeHint;
 
+    // Mostrar/ocultar panel de configuración según si es host
     if (window.socketHandler.isHost) {
         elements.gameConfig.style.display = 'block';
     } else {
@@ -184,13 +217,16 @@ function updatePlayersList() {
         const badges = document.createElement('div');
         badges.className = 'player-badges';
 
-        if (player.id === window.socketHandler.currentRoom || appState.players[0].id === player.id) {
+        // Badge de host
+        if (player.id === window.socketHandler.currentRoom ||
+            appState.players[0].id === player.id) {
             const hostBadge = document.createElement('span');
             hostBadge.className = 'badge badge-host';
             hostBadge.textContent = 'HOST';
             badges.appendChild(hostBadge);
         }
 
+        // Badge de amigo
         if (player.friends && player.friends.includes(myId)) {
             const friendBadge = document.createElement('span');
             friendBadge.className = 'badge badge-friend';
@@ -204,6 +240,7 @@ function updatePlayersList() {
         playerItem.appendChild(avatar);
         playerItem.appendChild(info);
 
+        // Botón agregar amigo (si no es el usuario actual y no son amigos)
         if (player.id !== myId && (!player.friends || !player.friends.includes(myId))) {
             const addFriendBtn = document.createElement('button');
             addFriendBtn.className = 'add-friend-btn';
@@ -219,6 +256,7 @@ function updatePlayersList() {
     });
 }
 
+// Botones de configuración
 document.querySelectorAll('.btn-number').forEach(btn => {
     btn.addEventListener('click', () => {
         const action = btn.dataset.action;
@@ -243,12 +281,14 @@ elements.includeHintInput.addEventListener('change', () => {
     window.socketHandler.updateConfig(appState.config);
 });
 
+// Copiar código
 elements.copyCodeBtn.addEventListener('click', () => {
     navigator.clipboard.writeText(appState.roomCode).then(() => {
         showToast('¡Código copiado!');
     });
 });
 
+// Compartir enlace
 elements.shareLinkBtn.addEventListener('click', () => {
     const link = `${window.location.origin}?room=${appState.roomCode}`;
 
@@ -258,6 +298,7 @@ elements.shareLinkBtn.addEventListener('click', () => {
             text: `¡Únete a mi sala! Código: ${appState.roomCode}`,
             url: link
         }).catch(() => {
+            // Si falla, copiar al portapapeles
             navigator.clipboard.writeText(link);
             showToast('¡Enlace copiado!');
         });
@@ -267,6 +308,7 @@ elements.shareLinkBtn.addEventListener('click', () => {
     }
 });
 
+// Iniciar juego
 elements.startGameBtn.addEventListener('click', () => {
     window.socketHandler.startGame((response) => {
         if (!response.success) {
@@ -275,21 +317,20 @@ elements.startGameBtn.addEventListener('click', () => {
     });
 });
 
+// Salir de la sala
 elements.leaveRoomBtn.addEventListener('click', () => {
     location.reload();
 });
 
-// ========== Pantalla de Revelación (SIMPLIFICADA - SIN CORTINA) ==========
+// ========== Pantalla de Revelación ==========
 function initRevealScreen(assignment, turnOrder, currentTurn) {
     appState.assignment = assignment;
     appState.turnOrder = turnOrder;
     appState.currentTurn = currentTurn;
 
+    // Configurar contenido
     if (assignment.isImpostor) {
-        elements.wordDisplay.innerHTML = `
-            <div class="impostor-icon">🎭</div>
-            <div class="impostor-text">ERES EL IMPOSTOR</div>
-        `;
+        elements.wordDisplay.innerHTML = '🎭<br>ERES EL<br>IMPOSTOR';
         elements.wordDisplay.classList.add('impostor');
 
         if (assignment.hint) {
@@ -301,10 +342,15 @@ function initRevealScreen(assignment, turnOrder, currentTurn) {
     } else {
         elements.wordDisplay.textContent = assignment.word;
         elements.wordDisplay.classList.remove('impostor');
-        elements.hintDisplay.style.display
-
-            = 'none';
+        elements.hintDisplay.style.display = 'none';
     }
+
+    // Inicializar swipe
+    if (appState.swipeReveal) {
+        appState.swipeReveal.destroy();
+    }
+
+    appState.swipeReveal = new SwipeReveal(elements.revealCurtain);
 
     showScreen('reveal');
 }
@@ -312,11 +358,22 @@ function initRevealScreen(assignment, turnOrder, currentTurn) {
 // Botón listo
 elements.readyBtn.addEventListener('click', () => {
     window.socketHandler.wordRevealed();
+    // Esperar a que todos estén listos
+    elements.readyBtn.addEventListener('click', () => {
+        window.socketHandler.wordRevealed();
+        // Esperar a que todos estén listos
+    });
+});
+// Evento de palabra revelada
+window.addEventListener('word-revealed', () => {
+    elements.readyBtn.style.display = 'inline-flex';
 });
 
 // ========== Pantalla de Juego ==========
 function initGameScreen() {
     showScreen('game');
+
+    // Configurar orden de turnos
     updateTurnOrder();
     updateCurrentTurn(appState.currentTurn);
 }
@@ -348,6 +405,7 @@ function updateCurrentTurn(player) {
     appState.currentTurn = player;
     elements.currentTurnName.textContent = player.name;
 
+    // Actualizar visualización
     document.querySelectorAll('.turn-item').forEach(item => {
         item.classList.remove('active');
         if (item.dataset.playerId === player.id) {
@@ -355,6 +413,7 @@ function updateCurrentTurn(player) {
         }
     });
 
+    // Habilitar/deshabilitar chat
     const isMyTurn = player.id === window.socketHandler.getSocketId();
     elements.chatInput.disabled = !isMyTurn;
     elements.sendChatBtn.disabled = !isMyTurn;
@@ -384,8 +443,10 @@ function addChatMessage(message) {
     elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
 }
 
+// Enviar mensaje
 function sendChatMessage() {
     const message = elements.chatInput.value.trim();
+
     if (!message) return;
 
     window.socketHandler.sendChatMessage(message, (response) => {
@@ -444,18 +505,18 @@ window.addEventListener('players-updated', (e) => {
     appState.players = e.detail;
     updatePlayersList();
 });
-
-// AUTO-CHAT cuando todos listos
+// Todos listos - cambiar a pantalla de juego
 window.addEventListener('all-players-ready', () => {
     initGameScreen();
     showToast('¡Todos listos! Que comience el juego');
 });
-
 // ========== Inicialización ==========
+// Verificar si hay código de sala en la URL
 const urlParams = new URLSearchParams(window.location.search);
 const roomCodeFromUrl = urlParams.get('room');
 
 if (roomCodeFromUrl) {
     elements.roomCodeInput.value = roomCodeFromUrl;
+    // Esperar a que el usuario ingrese su nombre
     showToast('Has recibido una invitación a una sala');
 }
