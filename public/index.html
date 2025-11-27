@@ -72,19 +72,11 @@
       <div id="game-config" class="card config-panel">
         <h3>Configuración del Juego</h3>
         <div class="config-row">
-          <label for="impostor-count">Número de impostores:</label>
-          <div class="number-input">
-            <button class="btn-number" data-action="decrease" data-target="impostor-count">-</button>
-            <input type="number" id="impostor-count" value="1" min="1" max="3" readonly>
-            <button class="btn-number" data-action="increase" data-target="impostor-count">+</button>
+          <label>Número de impostores:</label>
+          <div class="impostor-selector">
+            <button class="btn-impostor-select active" data-count="1">1</button>
+            <button class="btn-impostor-select" data-count="2">2</button>
           </div>
-        </div>
-        <div class="config-row">
-          <label for="include-hint">Dar pista al impostor:</label>
-          <label class="switch">
-            <input type="checkbox" id="include-hint">
-            <span class="slider"></span>
-          </label>
         </div>
         <button id="start-game-btn" class="btn btn-primary">
           <i class="fas fa-play"></i>
@@ -150,6 +142,19 @@
             <i class="fas fa-paper-plane"></i>
           </button>
         </div>
+      </div>
+
+      <!-- Voting Section -->
+      <div id="voting-section" class="card voting-card" style="display: none;">
+        <h3>🗳️ Fase de Votación</h3>
+        <p class="voting-instructions">Vota para eliminar a un jugador sospechoso o continúa sin eliminar a nadie.</p>
+        <div id="voting-buttons" class="voting-buttons"></div>
+      </div>
+
+      <!-- Voting Results -->
+      <div id="voting-results" class="card results-card" style="display: none;">
+        <h3>Resultado de la Votación</h3>
+        <div id="results-content"></div>
       </div>
     </div>
   </div>
