@@ -30,11 +30,14 @@ const elements = {
     playersList: document.getElementById('players-list'),
     playerCount: document.getElementById('player-count'),
     gameConfig: document.getElementById('game-config'),
+    impostorCountInput: document.getElementById('impostor-count'),
+    includeHintInput: document.getElementById('include-hint'),
     startGameBtn: document.getElementById('start-game-btn'),
     leaveRoomBtn: document.getElementById('leave-room-btn'),
 
     // Reveal screen
     revealScreen: document.getElementById('reveal-screen'),
+    revealCurtain: document.getElementById('reveal-curtain'),
     wordDisplay: document.getElementById('word-display'),
     hintDisplay: document.getElementById('hint-display'),
     readyBtn: document.getElementById('ready-btn'),
@@ -178,13 +181,9 @@ function updateLobby() {
     // Actualizar lista de jugadores
     updatePlayersList();
 
-    // Actualizar UI de botones de selector de impostores
-    document.querySelectorAll('.btn-impostor-select').forEach(btn => {
-        btn.classList.remove('active');
-        if (parseInt(btn.dataset.count) === appState.config.impostorCount) {
-            btn.classList.add('active');
-        }
-    });
+    // Actualizar configuración
+    elements.impostorCountInput.value = appState.config.impostorCount;
+    elements.includeHintInput.checked = appState.config.includeHint;
 
     // Mostrar/ocultar panel de configuración según si es host
     if (window.socketHandler.isHost) {
@@ -257,19 +256,29 @@ function updatePlayersList() {
     });
 }
 
-// Botones de selector de impostores (1 o 2)
-document.querySelectorAll('.btn-impostor-select').forEach(btn => {
+// Botones de configuración
+document.querySelectorAll('.btn-number').forEach(btn => {
     btn.addEventListener('click', () => {
-        const count = parseInt(btn.dataset.count);
-        appState.config.impostorCount = count;
+        const action = btn.dataset.action;
+        const targetId = btn.dataset.target;
+        const input = document.getElementById(targetId);
+        let value = parseInt(input.value);
 
-        // Update UI
-        document.querySelectorAll('.btn-impostor-select').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        if (action === 'increase') {
+            value = Math.min(value + 1, parseInt(input.max));
+        } else {
+            value = Math.max(value - 1, parseInt(input.min));
+        }
 
-        // Notify server
+        input.value = value;
+        appState.config.impostorCount = value;
         window.socketHandler.updateConfig(appState.config);
     });
+});
+
+elements.includeHintInput.addEventListener('change', () => {
+    appState.config.includeHint = elements.includeHintInput.checked;
+    window.socketHandler.updateConfig(appState.config);
 });
 
 // Copiar código
