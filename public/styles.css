@@ -584,51 +584,6 @@ input[type="text"]::placeholder {
 /* NUMBER INPUT */
 .number-input {
   display: flex;
-  align-items: center;
-  gap: var(--space-md);
-}
-
-.btn-number {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  border: 2px solid rgba(0, 242, 254, 0.4);
-  background: var(--bg-card);
-  color: var(--neon-blue);
-  font-size: 1.5rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all var(--trans-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-number:hover {
-  background: var(--gradient-neon);
-  color: white;
-  border-color: transparent;
-  transform: scale(1.15);
-  box-shadow: var(--shadow-glow);
-}
-
-.number-input input {
-  width: 60px;
-  text-align: center;
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 900;
-  background: var(--gradient-neon);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  border: none;
-  pointer-events: none;
-}
-
-/* SWITCH TOGGLE */
-.switch {
-  position: relative;
   width: 64px;
   height: 34px;
 }

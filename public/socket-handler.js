@@ -88,7 +88,7 @@ class SocketHandler {
     }
 
     startGame(callback) {
-        This.socket.emit('start-game', callback);
+        this.socket.emit('start-game', callback);
     }
 
     wordRevealed() {
