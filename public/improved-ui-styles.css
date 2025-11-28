@@ -1,0 +1,91 @@
+/* ===== IMPOSTOR SELECTOR - IMPROVED ===== */
+.impostor-selector {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 2px solid rgba(0, 242, 254, 0.3);
+}
+
+.btn-impostor-select {
+    min-width: 80px;
+    min-height: 80px;
+    font-size: 2rem;
+    font-weight: 900;
+    background: rgba(255, 255, 255, 0.1);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-impostor-select:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 242, 254, 0.8);
+    box-shadow: 0 8px 30px rgba(0, 242, 254, 0.4);
+}
+
+.btn-impostor-select.active {
+    background: linear-gradient(135deg, #06ffa5, #00d4aa);
+    border-color: #06ffa5;
+    color: #000;
+    box-shadow: 0 0 40px rgba(6, 255, 165, 0.8);
+    font-weight: 900;
+}
+
+/* ===== REVEAL SCREEN - SIMPLIFIED ===== */
+.reveal-instruction {
+    display: none !important;
+    /* Hide "desliza" text */
+}
+
+.reveal-content {
+    position: relative !important;
+    transform: none !important;
+    padding: var(--space-xl);
+}
+
+.word-display {
+    font-size: 4rem !important;
+    font-weight: 900 !important;
+    background: linear-gradient(135deg, #ff006e, #7b2cbf, #00f2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    padding: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    text-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+    animation: pulse-word 2s ease-in-out infinite;
+}
+
+.word-display.impostor {
+    font-size: 3.5rem !important;
+    background: linear-gradient(135deg, #ff006e, #ff4d00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+@keyframes pulse-word {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.reveal-curtain {
+    position: relative !important;
+    transform: none !important;
+}
