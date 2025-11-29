@@ -1,0 +1,24 @@
+<!-- ADD AFTER CHAT SECTION IN GAME SCREEN -->
+
+      <!-- Voting Button - Always Visible -->
+      <div class="card voting-trigger-card">
+        <button id="ready-to-vote-btn" class="btn btn-vote-trigger">
+          <i class="fas fa-vote-yea"></i>
+          Listo para Votar
+          <span id="ready-vote-count" class="ready-count">(0/0)</span>
+        </button>
+        <p class="vote-info">Cuando todos estén listos, se abrirá la votación</p>
+      </div>
+
+      <!-- Voting Section - Light Colors -->
+      <div id="voting-section" class="card voting-card-light" style="display: none;">
+        <h3>🗳️ Votación</h3>
+        <p class="voting-instructions-light">¿Quién crees que es el impostor?</p>
+        <div id="voting-buttons" class="voting-buttons-light"></div>
+      </div>
+
+      <!-- Voting Results -->
+      <div id="voting-results" class="card results-card-light" style="display: none;">
+        <h3>📊 Resultado</h3>
+        <div id="results-content"></div>
+      </div>

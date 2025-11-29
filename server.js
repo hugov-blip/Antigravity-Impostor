@@ -155,6 +155,12 @@ io.on('connection', (socket) => {
             room.gameState.readyPlayers.push(socket.id);
         }
 
+        // Broadcast ready count
+        io.to(room.code).emit('ready-status-update', {
+            ready: room.gameState.readyPlayers.length,
+            total: room.players.length
+        });
+
         // Notificar a otros jugadores
         socket.to(room.code).emit('player-ready', socket.id);
 

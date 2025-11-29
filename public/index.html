@@ -94,25 +94,14 @@
   <!-- Pantalla de Revelación de Palabra -->
   <div id="reveal-screen" class="screen">
     <div class="reveal-container">
-      <div class="reveal-instruction">
-        <i class="fas fa-hand-point-up"></i>
-        <p>Desliza hacia arriba para ver tu palabra</p>
-        <p class="hint-text">Asegúrate de que nadie más esté mirando</p>
-      </div>
-
-      <div id="reveal-curtain" class="reveal-curtain">
-        <div class="curtain-handle">
-          <div class="handle-bar"></div>
-        </div>
-
-        <div class="reveal-content">
-          <div id="word-display" class="word-display"></div>
-          <div id="hint-display" class="hint-display"></div>
-          <button id="ready-btn" class="btn btn-primary">
-            Estoy Listo
-            <i class="fas fa-check"></i>
-          </button>
-        </div>
+      <div class="reveal-content">
+        <div id="word-display" class="word-display"></div>
+        <div id="hint-display" class="hint-display"></div>
+        <button id="ready-btn" class="btn btn-primary">
+          <i class="fas fa-check"></i>
+          Estoy Listo
+          <span id="ready-count" class="ready-count">(0/0)</span>
+        </button>
       </div>
     </div>
   </div>
@@ -144,16 +133,26 @@
         </div>
       </div>
 
-      <!-- Voting Section -->
-      <div id="voting-section" class="card voting-card" style="display: none;">
-        <h3>🗳️ Fase de Votación</h3>
-        <p class="voting-instructions">Vota para eliminar a un jugador sospechoso o continúa sin eliminar a nadie.</p>
-        <div id="voting-buttons" class="voting-buttons"></div>
+      <!-- Voting Button - Always Visible -->
+      <div class="card voting-trigger-card">
+        <button id="ready-to-vote-btn" class="btn btn-vote-trigger">
+          <i class="fas fa-vote-yea"></i>
+          Listo para Votar
+          <span id="ready-vote-count" class="ready-count">(0/0)</span>
+        </button>
+        <p class="vote-info">Cuando todos estén listos, se abrirá la votación</p>
+      </div>
+
+      <!-- Voting Section - Light Colors -->
+      <div id="voting-section" class="card voting-card-light" style="display: none;">
+        <h3>🗳️ Votación</h3>
+        <p class="voting-instructions-light">¿Quién crees que es el impostor?</p>
+        <div id="voting-buttons" class="voting-buttons-light"></div>
       </div>
 
       <!-- Voting Results -->
-      <div id="voting-results" class="card results-card" style="display: none;">
-        <h3>Resultado de la Votación</h3>
+      <div id="voting-results" class="card results-card-light" style="display: none;">
+        <h3>📊 Resultado</h3>
         <div id="results-content"></div>
       </div>
     </div>
