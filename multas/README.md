@@ -77,8 +77,11 @@ npm run dev
 ```bash
 npm run build      # typecheck + build de producción
 npm run lint
-npm run test:db    # 38 comprobaciones end-to-end contra Supabase con la anon key (crea equipos de prueba)
+npm run test:db    # 38 comprobaciones de la API y la seguridad contra Supabase con la anon key (crea equipos de prueba)
+npm run test:e2e   # recorrido completo en Chrome con Playwright (con `npm run dev` arrancado y la BD vacía)
 ```
+
+`test:e2e` admite `HEADLESS=0` (ventana visible), `BASE_URL` y `SCREENSHOT_DIR` (guarda capturas de cada paso).
 
 ### Despliegue
 

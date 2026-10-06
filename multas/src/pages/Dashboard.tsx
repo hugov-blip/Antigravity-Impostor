@@ -24,7 +24,7 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null)
   const [previewColors, setPreviewColors] = useState<{ primary: string; secondary: string } | null>(null)
   const [copied, setCopied] = useState(false)
-  const isNew = params.get('nuevo') === '1'
+  const isNew = params.get('nuevo') === '1' && token !== null
 
   const logout = useCallback(
     async (callServer = true) => {
@@ -34,9 +34,10 @@ export default function Dashboard() {
       setPriv(null)
       setTab('pending')
       setPreviewColors(null)
+      setParams({}, { replace: true })
       if (callServer && t) await api.closeSession(t).catch(() => {})
     },
-    [slug],
+    [slug, setParams],
   )
 
   const load = useCallback(async () => {
@@ -103,11 +104,11 @@ export default function Dashboard() {
   const team = publicTeam
   const role = priv?.role
   const colors = previewColors ?? { primary: team.primary_color, secondary: team.secondary_color }
-  const tabs: { id: Tab; label: string; show: boolean }[] = [
+  const tabs: { id: Tab; label: string; short?: string; show: boolean }[] = [
     { id: 'pending', label: 'Pendientes', show: true },
     { id: 'impose', label: 'Multar', show: Boolean(role?.can_impose) },
     { id: 'history', label: 'Historial', show: Boolean(role) },
-    { id: 'settings', label: 'Ajustes del Equipo', show: Boolean(role?.can_manage_settings) },
+    { id: 'settings', label: 'Ajustes del Equipo', short: 'Ajustes', show: Boolean(role?.can_manage_settings) },
   ]
   const shareUrl = `${window.location.origin}/t/${team.slug}`
 
@@ -187,12 +188,20 @@ export default function Dashboard() {
                   type="button"
                   onClick={() => setTab(t.id)}
                   aria-current={tab === t.id ? 'page' : undefined}
+                  aria-label={t.label}
                   className={cn(
                     'shrink-0 rounded-full px-4 py-2 text-sm font-medium transition',
                     tab === t.id ? 'bg-brand text-brand-fg shadow-sm' : 'text-slate-600 hover:bg-white',
                   )}
                 >
-                  {t.label}
+                  {t.short ? (
+                    <>
+                      <span className="sm:hidden">{t.short}</span>
+                      <span className="hidden sm:inline">{t.label}</span>
+                    </>
+                  ) : (
+                    t.label
+                  )}
                 </button>
               ))}
           </nav>
