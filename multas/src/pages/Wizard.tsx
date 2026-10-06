@@ -300,8 +300,10 @@ export default function Wizard() {
             <Card className="space-y-4 p-5">
               <h3 className="font-semibold">Catálogo de multas</h3>
               <form onSubmit={addCatalog} className="flex gap-2">
-                <Input placeholder="Motivo" value={reason} onChange={(e) => setReason(e.target.value)} />
-                <Input className="w-24 shrink-0" inputMode="decimal" placeholder="€" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                <Input aria-label="Motivo" className="min-w-0 flex-1" placeholder="Motivo" value={reason} onChange={(e) => setReason(e.target.value)} />
+                <div className="w-24 shrink-0">
+                  <Input aria-label="Importe en euros" inputMode="decimal" placeholder="€" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                </div>
                 <Button type="submit" variant="outline">
                   Añadir
                 </Button>

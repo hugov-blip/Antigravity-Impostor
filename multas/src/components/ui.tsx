@@ -1,4 +1,4 @@
-import { useId, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from 'react'
+import { useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from 'react'
 import { cn } from '../lib/utils'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'dark'
@@ -105,17 +105,53 @@ export function Checkbox({ checked, onChange, label, disabled }: { checked: bool
   )
 }
 
+const COLOR_PRESETS = ['#1d4ed8', '#0f766e', '#15803d', '#b91c1c', '#7c3aed', '#0f172a', '#f59e0b', '#facc15', '#ea580c', '#db2777', '#0ea5e9', '#ffffff']
+
 export function ColorInput({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  const [text, setText] = useState(value)
+  const [prev, setPrev] = useState(value)
+  if (value !== prev) {
+    setPrev(value)
+    setText(value)
+  }
+
+  function onText(raw: string) {
+    const v = raw.startsWith('#') ? raw : `#${raw}`
+    setText(v)
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) onChange(v.toLowerCase())
+  }
+
   return (
-    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-white p-2.5 pr-3.5">
-      <span className="relative size-10 shrink-0 overflow-hidden rounded-lg border border-black/5" style={{ background: value }}>
-        <input type="color" value={value} onChange={(e) => onChange(e.target.value)} className="absolute inset-0 cursor-pointer opacity-0" aria-label={label} />
-      </span>
-      <span className="min-w-0">
-        <span className="block text-sm font-medium text-slate-700">{label}</span>
-        <span className="block font-mono text-xs uppercase text-slate-500">{value}</span>
-      </span>
-    </label>
+    <div className="space-y-2.5 rounded-xl border border-slate-200 bg-white p-2.5">
+      <div className="flex items-center gap-2.5">
+        <label className="relative size-10 shrink-0 cursor-pointer overflow-hidden rounded-lg border border-black/10" style={{ background: value }}>
+          <input type="color" value={value} onChange={(e) => onChange(e.target.value)} className="absolute inset-0 cursor-pointer opacity-0" aria-label={`${label} (selector)`} />
+        </label>
+        <div className="min-w-0 flex-1">
+          <span className="block truncate text-sm font-medium text-slate-700">{label}</span>
+          <input
+            aria-label={`${label} (hex)`}
+            value={text}
+            maxLength={7}
+            spellCheck={false}
+            onChange={(e) => onText(e.target.value.trim())}
+            className="w-full rounded bg-transparent font-mono text-xs uppercase text-slate-500 outline-none focus:text-slate-900"
+          />
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {COLOR_PRESETS.map((c) => (
+          <button
+            key={c}
+            type="button"
+            aria-label={`${label}: ${c}`}
+            onClick={() => onChange(c)}
+            className={cn('size-5 rounded-full border border-black/10 transition hover:scale-110', value.toLowerCase() === c && 'ring-2 ring-slate-900 ring-offset-1')}
+            style={{ background: c }}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
 
