@@ -185,3 +185,10 @@ Este proyecto es de código abierto y está disponible para uso personal y educa
 ---
 
 ¡Diviértete jugando! 🎉
+
+---
+
+## 💶 Multas (nueva app)
+
+En la carpeta [`multas/`](multas/) vive una app independiente para gestionar las multas de equipos deportivos
+(React + Tailwind + Supabase). Instrucciones en [`multas/README.md`](multas/README.md).
