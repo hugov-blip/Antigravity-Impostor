@@ -71,7 +71,7 @@ try {
   await shot('wizard-identidad', false)
   await page.getByRole('button', { name: 'Continuar' }).click()
 
-  await page.getByRole('button', { name: 'Entrenador', exact: true }).click()
+  await page.getByLabel('Tu rol').fill('Entrenador')
   await page.getByLabel('Tu PIN').fill('1111')
   await page.getByLabel('Repite el PIN').fill('1111')
   for (const [name, pin, perm] of [
@@ -96,13 +96,18 @@ try {
   const memberInput = page.getByPlaceholder('Nombre (o varios separados por comas)')
   await memberInput.fill('Ana, Luis, Marta, Pablo')
   await page.locator('form', { has: memberInput }).getByRole('button', { name: 'Añadir' }).click()
-  for (const s of ['Llegar tarde', 'Faltar al entrenamiento', 'Tarjeta roja']) {
-    await page.getByRole('button', { name: new RegExp(`^\\+ ${s}`) }).click()
+  const catalogForm = page.locator('form', { has: page.getByLabel('Motivo') })
+  for (const [motivo, euros] of [
+    ['Llegar tarde', '5'],
+    ['Faltar al entrenamiento', '10'],
+    ['Tarjeta roja', '10'],
+    ['Móvil en el vestuario', '2'],
+  ]) {
+    await page.getByLabel('Motivo').fill(motivo)
+    await page.getByLabel('Importe en euros').fill(euros)
+    await catalogForm.getByRole('button', { name: 'Añadir' }).click()
+    await page.getByText(motivo).waitFor()
   }
-  await page.getByLabel('Motivo').fill('Móvil en el vestuario')
-  await page.getByLabel('Importe en euros').fill('2')
-  await page.locator('form', { has: page.getByLabel('Motivo') }).getByRole('button', { name: 'Añadir' }).click()
-  await page.getByText('Móvil en el vestuario').waitFor()
   await pause()
   await shot('wizard-plantilla-catalogo', false)
   await page.getByRole('button', { name: 'Crear equipo' }).click()

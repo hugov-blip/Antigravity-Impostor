@@ -50,15 +50,17 @@ Todo está en [`supabase/migrations`](supabase/migrations).
 ### Opción A: Supabase en la nube
 
 1. Crea un proyecto en [supabase.com](https://supabase.com).
-2. Aplica la migración:
-   ```bash
-   cd multas
-   npm install
-   npx supabase login
-   npx supabase link --project-ref <ref-del-proyecto>
-   npx supabase db push
-   ```
-   (o pega el contenido de `supabase/migrations/*.sql` en el SQL Editor).
+2. Aplica el esquema **vacío** (sin datos de ejemplo):
+   - **Proyecto ya usado / SQL antiguo:** pega `supabase/reset-and-create.sql` en el SQL Editor y ejecútalo. Borra todas las tablas de la app y las recrea vacías.
+   - **Proyecto nuevo:**
+     ```bash
+     cd multas
+     npm install
+     npx supabase login
+     npx supabase link --project-ref <ref-del-proyecto>
+     npx supabase db push
+     ```
+     (o pega `supabase/migrations/*.sql` en el SQL Editor).
 3. `cp .env.example .env.local` y rellena `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` (Project Settings → API).
 4. `npm run dev` y abre http://localhost:5173.
 

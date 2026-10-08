@@ -67,7 +67,7 @@ function RulesSection({ token, initial, onChanged }: { token: string; initial: s
   const { busy, error, saved, run } = useAction(onChanged)
   return (
     <Section title="🔒 Normas del equipo" description="Privado: solo visible para roles con permiso de ajustes.">
-      <Textarea rows={6} value={rules} onChange={(e) => setRules(e.target.value)} placeholder="Ej. Los entrenadores pagan el doble." />
+      <Textarea rows={6} value={rules} onChange={(e) => setRules(e.target.value)} placeholder="Normas internas (opcional)" />
       {error && <Alert>{error}</Alert>}
       <div className="flex items-center justify-end gap-3">
         {saved && <span className="text-sm text-emerald-600">Guardado</span>}

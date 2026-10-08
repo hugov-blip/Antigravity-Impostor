@@ -9,14 +9,6 @@ import { rememberTeam } from '../lib/recent'
 import { cn, formatEUR, isValidPin, sessionStore, themeVars } from '../lib/utils'
 
 const STEPS = ['Identidad', 'Roles', 'Normas', 'Plantilla'] as const
-const ROLE_SUGGESTIONS = ['Entrenador', 'Capitán', 'Directivo', 'Delegado', 'Tesorero']
-const CATALOG_SUGGESTIONS = [
-  { reason: 'Llegar tarde', base_amount: 5 },
-  { reason: 'Faltar al entrenamiento', base_amount: 10 },
-  { reason: 'Tarjeta amarilla', base_amount: 3 },
-  { reason: 'Tarjeta roja', base_amount: 10 },
-  { reason: 'Olvidar la equipación', base_amount: 5 },
-]
 
 type CatalogDraft = { reason: string; base_amount: number }
 
@@ -159,7 +151,7 @@ export default function Wizard() {
             <StepTitle title="Identidad del equipo" subtitle="Así se verá tu equipo en su página pública." />
             <Card className="space-y-5 p-5">
               <Field label="Nombre del equipo">
-                {(id) => <Input id={id} autoFocus placeholder="Ej. CD Los Halcones" value={name} onChange={(e) => setName(e.target.value)} />}
+                {(id) => <Input id={id} autoFocus placeholder="Nombre del equipo" value={name} onChange={(e) => setName(e.target.value)} />}
               </Field>
               <Field label="Escudo o logo">{() => <LogoInput name={name} value={logo} onChange={setLogo} />}</Field>
               <div className="grid grid-cols-2 gap-3">
@@ -179,7 +171,7 @@ export default function Wizard() {
                 </div>
                 <div className="flex items-center justify-between p-4">
                   <span className="text-sm text-slate-500">Total recaudado</span>
-                  <span className="rounded-full bg-brand-2 px-3 py-1 text-sm font-semibold text-brand-2-fg">{formatEUR(120)}</span>
+                  <span className="rounded-full bg-brand-2 px-3 py-1 text-sm font-semibold text-brand-2-fg">{formatEUR(0)}</span>
                 </div>
               </Card>
             </div>
@@ -191,23 +183,8 @@ export default function Wizard() {
             <StepTitle title="¿Qué rol tienes en el equipo?" subtitle="Serás el administrador. Cada rol entra con su propio PIN." />
             <Card className="space-y-4 p-5">
               <Field label="Tu rol">
-                {(id) => <Input id={id} autoFocus placeholder="Ej. Entrenador" value={creatorRole} onChange={(e) => setCreatorRole(e.target.value)} />}
+                {(id) => <Input id={id} autoFocus placeholder="Tu rol" value={creatorRole} onChange={(e) => setCreatorRole(e.target.value)} />}
               </Field>
-              <div className="flex flex-wrap gap-2">
-                {ROLE_SUGGESTIONS.map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => setCreatorRole(s)}
-                    className={cn(
-                      'rounded-full border px-3 py-1.5 text-sm transition',
-                      creatorRole === s ? 'border-brand bg-brand text-brand-fg' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300',
-                    )}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
               <div className="grid grid-cols-2 gap-3">
                 <Field label="Tu PIN">{(id) => <PinInput id={id} value={creatorPin} onChange={setCreatorPin} />}</Field>
                 <Field label="Repite el PIN">{(id) => <PinInput id={id} value={creatorPin2} onChange={setCreatorPin2} />}</Field>
@@ -219,7 +196,7 @@ export default function Wizard() {
               <div className="flex items-end justify-between">
                 <div>
                   <h3 className="font-semibold text-slate-900">Otros roles</h3>
-                  <p className="text-sm text-slate-500">Capitán, tesorero… cada uno con sus permisos.</p>
+                  <p className="text-sm text-slate-500">Cada rol entra con su propio PIN y permisos.</p>
                 </div>
                 {!addingRole && (
                   <Button type="button" variant="outline" size="sm" onClick={() => setAddingRole(true)}>
@@ -259,7 +236,7 @@ export default function Wizard() {
               <Textarea
                 autoFocus
                 rows={8}
-                placeholder={'Ej.\n- Los entrenadores pagan el doble.\n- Las multas se pagan antes de fin de mes.'}
+                placeholder="Normas internas (opcional)"
                 value={rules}
                 onChange={(e) => setRules(e.target.value)}
               />
@@ -323,21 +300,6 @@ export default function Wizard() {
                   ))}
                 </ul>
               )}
-              <div>
-                <p className="mb-2 text-xs text-slate-500">Sugerencias</p>
-                <div className="flex flex-wrap gap-2">
-                  {CATALOG_SUGGESTIONS.filter((s) => !catalog.some((c) => c.reason === s.reason)).map((s) => (
-                    <button
-                      key={s.reason}
-                      type="button"
-                      onClick={() => setCatalog([...catalog, s])}
-                      className="rounded-full border border-dashed border-slate-300 px-3 py-1.5 text-sm text-slate-600 hover:border-brand hover:text-slate-900"
-                    >
-                      + {s.reason} · {formatEUR(s.base_amount)}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </Card>
           </>
         )}

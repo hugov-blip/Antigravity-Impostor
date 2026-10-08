@@ -44,7 +44,7 @@ export default function RoleEditor({ initial, pinOptional, lockPermissions, subm
     <form onSubmit={submit} className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Nombre del rol">
-          {(id) => <Input id={id} placeholder="Ej. Tesorero" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />}
+          {(id) => <Input id={id} placeholder="Nombre del rol" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />}
         </Field>
         <Field label={pinOptional ? 'Nuevo PIN (opcional)' : 'PIN de acceso'} hint={pinOptional ? 'Déjalo vacío para mantener el actual' : '4–8 dígitos, único por rol'}>
           {(id) => <PinInput id={id} value={draft.pin} onChange={(pin) => setDraft({ ...draft, pin })} />}

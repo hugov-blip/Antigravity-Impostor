@@ -1,3 +1,46 @@
+-- Multas: drop every app object and recreate an empty schema.
+-- Paste this whole file into the Supabase SQL Editor (SQL → New query → Run).
+-- This DESTROYS all teams, members, fines, sessions and PIN attempts.
+-- Tables are left empty: no seed, demo, or real player/team rows.
+
+-- ---------------------------------------------------------------------------
+-- 1. Drop every object the app created
+-- ---------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS public.create_team(jsonb);
+DROP FUNCTION IF EXISTS public.get_public_team(text);
+DROP FUNCTION IF EXISTS public.open_session(text, text);
+DROP FUNCTION IF EXISTS public.close_session(text);
+DROP FUNCTION IF EXISTS public.get_private_team(text);
+DROP FUNCTION IF EXISTS public.impose_fine(text, uuid, uuid, numeric);
+DROP FUNCTION IF EXISTS public.mark_fine_paid(text, uuid);
+DROP FUNCTION IF EXISTS public.void_fine(text, uuid);
+DROP FUNCTION IF EXISTS public.update_team_settings(text, jsonb);
+DROP FUNCTION IF EXISTS public.save_member(text, uuid, text, boolean);
+DROP FUNCTION IF EXISTS public.save_catalog_item(text, uuid, text, numeric, boolean);
+DROP FUNCTION IF EXISTS public.save_role(text, uuid, jsonb, text);
+DROP FUNCTION IF EXISTS public.delete_role(text, uuid);
+DROP FUNCTION IF EXISTS public._hash_pin(text);
+DROP FUNCTION IF EXISTS public._assert_pin_unique(uuid, text, uuid);
+DROP FUNCTION IF EXISTS public._slugify(text);
+DROP FUNCTION IF EXISTS public._session_role(text);
+DROP FUNCTION IF EXISTS public._require(boolean, text);
+DROP FUNCTION IF EXISTS public._role_json(public.roles);
+DROP FUNCTION IF EXISTS public._team_public_json(uuid);
+
+DROP TABLE IF EXISTS fines CASCADE;
+DROP TABLE IF EXISTS pin_attempts CASCADE;
+DROP TABLE IF EXISTS role_sessions CASCADE;
+DROP TABLE IF EXISTS fine_catalog CASCADE;
+DROP TABLE IF EXISTS members CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
+DROP TABLE IF EXISTS team_private CASCADE;
+DROP TABLE IF EXISTS teams CASCADE;
+
+-- ---------------------------------------------------------------------------
+-- 2. Recreate full structure (tables, FKs, indexes, RPCs, RLS, grants)
+-- ---------------------------------------------------------------------------
+
 -- Multas: multi-tenant sports team fines.
 -- Empty schema only: no seed rows, COPY, or demo/player/team names.
 --
